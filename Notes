@@ -1,0 +1,35 @@
+Ecological non-linear state spac emodel selection via adapative particle MCMC
+
+Non-linear state space ecological models (population growth models)
+
+1. Introduction
+
+SSM inference involves jointly estimating the latent state vector and the static parameter vector
+of the models for observations and states.
+
+Neither EKF nor MH and Gibbs works properly for parameter posterior inference because
+the models are highly non-linear and the joint lh surface can be multimodal.
+
+-> Particle MCMC algorithm for joint process and parameter estimation in non linear and non Gaussian SSM
+coupled with and adaptive Metropolis proposal (?).
+
+Objectives :
+- examine the perf of the new algo in non linear population growth model with complex lh surfaces
+- re-examine the problems of model selection with Bates factors estimated via MC samples.
+
+Allee effect ?
+
+1.1 Contribution
+
+The paper addresses three main concerns about model fitting to ecological time series :
+- inclusion of observation error (otherwise can lead to biased estimates and can have an effect on model selection)
+- model simplification : not needed with the approach used in the paper
+- efficient estimation and robust model selection
+
+1.2 Structure and notation
+Section 2 : presentation of five population growth models
+Section 3 : summary of issues regarding Bayesian estimation, prior selection and lh surface
+Section 4 : AdPMCMC algorithm
+Section 5 : Results and discussion
+
+2 Ecological State Space Models

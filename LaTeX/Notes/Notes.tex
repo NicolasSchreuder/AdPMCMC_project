@@ -1,0 +1,141 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\author{Nicolas Schreuder, Samuel Ritchie, Sholom Schechtman}
+\begin{document}
+
+Article : Ecological non-linear state spac emodel selection via adapative particle MCMC
+
+Study of non-linear state space ecological models (population growth models)
+
+\section{Introduction}
+
+SSM inference involves jointly estimating the latent state vector and the static parameter vector
+of the models for observations and states.
+
+Neither EKF nor MH and Gibbs works properly for parameter posterior inference because
+the models are highly non-linear and the joint lh surface can be multimodal.
+
+Particle MCMC algorithm for joint process and parameter estimation in non linear and non Gaussian SSM
+coupled with and adaptive Metropolis proposal (?).
+
+Objectives :
+- examine the perf of the new algo in non linear population growth model with complex lh surfaces
+- re-examine the problems of model selection with Bates factors estimated via MC samples.
+
+Allee effect ?
+
+\subsection{Contribution}
+
+The paper addresses three main concerns about model fitting to ecological time series :
+
+- inclusion of observation error (otherwise can lead to biased estimates and can have an effect on model selection)
+
+- model simplification : not needed with the approach used in the paper
+
+- efficient estimation and robust model selection
+
+\subsection{Structure and notation}
+Section 2 : presentation of five population growth models
+
+Section 3 : summary of issues regarding Bayesian estimation, prior selection and lh surface
+
+Section 4 : AdPMCMC algorithm
+
+Section 5 : Results and discussion
+
+\section{Ecological State Space Models}
+
+\subsection{Observation equations}
+
+Generic observation equation : 
+\begin{equation}
+y_t = g_t(n_t) + w_t, \quad w_t \sim \mathcal{N}(0, \sigma_w)
+\end{equation}
+
+Noise is necessary because observation mechanisms are imperfect, it represents all source of variability introduced by the data generating procedure.
+
+\subsection{Process equations}
+
+The models describe how the number of individuals in a population affect the subsequent growth of the population.
+
+$N_t$ is a continuous latent (i.e. not observed) random variable representing the population size.
+
+The process error $\epsilon_t \sim \mathcal{N}(0, \sigma_\epsilon^2)$ reflects all sources of variability in the underlying population growth process that is not captured by the model, assumed to behave multiplicatively on the natural scale (i.e. sum in log scale).
+
+\subsubsection{The exponential growth equation}
+
+Density independent model :
+
+\begin{equation}
+\log N_{t+1} = \log N_t + b_0 + \epsilon_t
+\end{equation}
+
+with $b_0 = r$, the maximum per-individual growth rate (diff between birth and death rates). 
+
+I think it is enough to consider only this model to begin.
+
+\section{Bayesian Estimation}
+
+$N_{0:T}$ is unobserved (latent) and must be estimated over the time interval $[0, T]$ at discrete time points $t=0, ..., T$.
+
+Posterior of interest : $p(\theta, n_{1:T} | y_{1:T})$
+($n_0$ is absorbed in $\theta$).
+
+\subsection{Priors, Likelihood and Posterior}
+
+Details of the chosen priors for parameters in the paper.
+
+For the simplest model$M_0$ :  $b_0 \sim \mathcal{N}(0,1)$, $\sigma_\epsilon^2 \sim IG(\alpha_\epsilon, \beta_\epsilon)$ and $\sigma_w^2 \sim IG(\alpha_w \beta_w)$.
+
+The likelihood (of the observations) is given by :
+
+\begin{equation}
+\mathcal{L}(n_{1:T}, \theta ; y_{1:T}) = \displaystyle\prod_{t=1}^T p(y_t | n_t, \sigma_w^2)
+\end{equation}
+
+Assumption : observations are conditionally independent given the latent state, latent state is Markovian.
+
+Target posterior distribution :
+
+\begin{equation}
+p(\theta, n_{1:T} |y_{1:T}) \propto p(\theta)\displaystyle\prod_{t=1}^T p(y_t|n_t, \theta) p(n_t |n_{t-1}, \theta)
+\end{equation}
+
+Comes from :
+
+\begin{equation}
+\begin{split}
+p(\theta, n_{1:T} | y_{1:T}) &\propto  p(\theta, n_{1:T}, y_{1:T}) \\
+&\propto p(\theta)p(n_{1:T}, y_{1:T} | \theta) \\
+&\propto p(\theta)p(y_{1:T} | n_{1:T}, \theta) p(n_{1:T} | \theta)\\
+\end{split}
+\end{equation}
+
+\subsection{Estimation and model selection}
+
+\subsection{AdPMCMC}
+
+Given the target posterior distribution how do we sample from it ?
+
+PMCMC : particle filter estimation of the optimal proposal distribution into MCMC algo
+
+Standard MH proposal distribution is split into two components :
+
+- proposal kernel via adaptive Metropolis scheme (?) to sample the static parameter
+
+- estimation of the posterior distribution of the latent states via SMC
+
+The resulting proposal kernel approximates the optimal choice
+
+See paper for resulting acceptance probability
+
+\begin{itemize}
+\item t
+\end{itemize}
+
+\end{document}
