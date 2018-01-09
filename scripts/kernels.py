@@ -1,13 +1,13 @@
 import numpy as np
 
-def nonAdaptiveThetaProposal(theta):
+def non_adaptive_theta_proposal(theta):
     """ 
     Non-adaptive Gaussian kernel for parameter proposal
     """
     d = theta.shape[0]
     return np.random.multivariate_normal(theta, (0.1)**2 / d * np.eye(d))
 
-def adaptiveThetaProposal(thetas):
+def adaptive_theta_proposal(thetas):
     """ 
     Adaptive Gaussian kernel for parameter proposal
     See algorithm 2 of paper
