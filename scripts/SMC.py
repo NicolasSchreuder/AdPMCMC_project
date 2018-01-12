@@ -1,10 +1,19 @@
 import numpy as np
 import datetime
 import scipy
+from scipy.stats import norm
 from matplotlib.dates import date2num
 from datetime import datetime
 
-from utils import process_date, gaussian_log_density, stratified_resampling, gaussian_kernel_density, equation
+from utils import process_date, stratified_resampling, gaussian_kernel_density, equation
+
+def gaussian_log_pdf(y, log_n, sigma_w):
+    """
+    Gaussian log-density for observation process
+    Reimplemented it because scipy.stats.norm.logpdf is too slow
+    """
+    return -0.5*np.log(2*np.pi*sigma_w**2) - (y - np.exp(log_n))**2/(2*sigma_w**2)
+
 
 def SMC(Y, T, L, N_0, model, SigmaEps , SigmaW, B_0=0 , B_1=0 , B_2=0 , B_3=0 , B_4=0):
     """
@@ -29,7 +38,9 @@ def SMC(Y, T, L, N_0, model, SigmaEps , SigmaW, B_0=0 , B_1=0 , B_2=0 , B_3=0 , 
     
     # Log-weight computation
     for l in range(L):
-        w[0, l] = gaussian_log_density(Y[0], LogParticles[0, l], SigmaW)
+        #w[0, l] = norm.logpdf(Y[0], loc=np.exp(LogParticles[0, l]), 
+        #                                  scale=SigmaW)
+        w[0, l] = gaussian_log_pdf(Y[0], LogParticles[0, l], SigmaW)
         LogW[0, l] = w[0, l]
     
     # Log-weight normalization
@@ -38,13 +49,17 @@ def SMC(Y, T, L, N_0, model, SigmaEps , SigmaW, B_0=0 , B_1=0 , B_2=0 , B_3=0 , 
     LogW[0, :] -= LogSumOfWeights
         
     for t in range(1, T):
+        obs_noise = np.random.normal(0, SigmaEps, L)
         for l in range(L):
             # Propagation
-            #LogParticles[t, l] = LogParticles[t-1, l] + B_0 + np.random.normal(0, SigmaEps)
-            LogParticles[t, l] = equation(LogParticles[t-1, l],model,SigmaEps,B_0,B_1,B_2,B_3,B_4)
+            LogParticles[t, l] = LogParticles[t-1, l] + B_0 + obs_noise[l]
+            #LogParticles[t, l] = equation(LogParticles[t-1, l], model, SigmaEps, 
+            #                              B_0, B_1, B_2, B_3, B_4)
         
             # Log-weight computation
-            w[t, l] = gaussian_log_density(Y[t], LogParticles[t, l], SigmaW)
+            #w[t, l] = norm.logpdf(Y[t], loc=np.exp(LogParticles[t, l]), scale=SigmaW)
+            w[t, l] = gaussian_log_pdf(Y[t], LogParticles[t, l], SigmaW)
+            
             LogW[t, l] = LogW[t-1, l] + w[t, l]
                 
         # Weight normalization (log scale)

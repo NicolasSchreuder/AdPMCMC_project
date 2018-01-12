@@ -13,12 +13,6 @@ def process_date(float_date):
         str_date += '0'
     return  date2num(datetime.strptime(str_date, '%Y.%m'))
 
-def gaussian_log_density(y, log_n, sigma_w):
-    """
-    Gaussian log-density for observation process
-    """
-    return -0.5*np.log(2*np.pi*sigma_w**2) - (y - np.exp(log_n))**2/(2*sigma_w**2)
-
 def stratified_resampling(weights):
     """
     Stratified resampling
@@ -50,7 +44,7 @@ def gaussian_kernel_density(theta_prev, theta):
     return scipy.stats.multivariate_normal.pdf(theta, theta_prev, 
                                                (0.1)**2/d * np.eye(d))
 
-def equation(x,model,sigma_eps,b_0=0, b_1=0, b_2=0, b_3=0, b_4=0):
+def equation(x, model, sigma_eps, b_0=0, b_1=0, b_2=0, b_3=0, b_4=0):
     """
     Defining equations for each model
     """   
