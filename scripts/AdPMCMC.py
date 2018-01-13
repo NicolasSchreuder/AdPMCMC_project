@@ -3,6 +3,7 @@ import pandas as pd
 import scipy
 from scipy.stats import invgamma
 from scipy.stats import norm
+from scipy.stats import gamma
 from tqdm import tqdm 
 
 from kernels import non_adaptive_theta_proposal, adaptive_theta_proposal
@@ -294,7 +295,7 @@ def AdPMCMC_M3(NSteps, T, AdaptiveRate, Y, L, N_0):
     # Parameters initialization
     B_0 = np.random.normal(0, 1)
     B_1 = np.random.normal(0, 1)
-    B_4 = np.random.normal(0, 1)
+    B_4 = np.random.gamma(1,10)
     SigmaEps = np.sqrt(invgamma.rvs(a=AlphaEps, scale=BetaEps))
     SigmaW = np.sqrt(invgamma.rvs(a=AlphaW, scale=BetaW))
     N_0 = N_0
