@@ -15,7 +15,7 @@ def gaussian_log_pdf(y, log_n, sigma_w):
     return -0.5*np.log(2*np.pi*sigma_w**2) - (y - np.exp(log_n))**2/(2*sigma_w**2)
 
 
-def SMC(Y, T, L, N_0, model, SigmaEps , SigmaW, B_0=0 , B_1=0 , B_2=0 , B_3=0 , B_4=0):
+def SMC(Y, T, L, N_0, model, SigmaEps , SigmaW, B_0=0 , B_1=0 , B_2=0 , B_3=0 , B_4=0, B_5=0, B_6=0, B_7=0):
     """
     Particle filter for M0 model
     y : observation trajectory
@@ -52,9 +52,9 @@ def SMC(Y, T, L, N_0, model, SigmaEps , SigmaW, B_0=0 , B_1=0 , B_2=0 , B_3=0 , 
         obs_noise = np.random.normal(0, SigmaEps, L)
         for l in range(L):
             # Propagation
-            LogParticles[t, l] = LogParticles[t-1, l] + B_0 + obs_noise[l]
-            #LogParticles[t, l] = equation(LogParticles[t-1, l], model, SigmaEps, 
-            #                              B_0, B_1, B_2, B_3, B_4)
+            #LogParticles[t, l] = LogParticles[t-1, l] + B_0 + obs_noise[l]
+            LogParticles[t, l] = equation(LogParticles[t-1, l], model, SigmaEps, 
+                                          B_0, B_1, B_2, B_3, B_4, B_5, B_6, B_7)
         
             # Log-weight computation
             #w[t, l] = norm.logpdf(Y[t], loc=np.exp(LogParticles[t, l]), scale=SigmaW)

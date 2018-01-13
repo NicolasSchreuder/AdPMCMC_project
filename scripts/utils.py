@@ -44,7 +44,7 @@ def gaussian_kernel_density(theta_prev, theta):
     return scipy.stats.multivariate_normal.pdf(theta, theta_prev, 
                                                (0.1)**2/d * np.eye(d))
 
-def equation(x, model, sigma_eps, b_0=0, b_1=0, b_2=0, b_3=0, b_4=0):
+def equation(x, model, sigma_eps, b_0=0, b_1=0, b_2=0, b_3=0, b_4=0, b_5=0, b_6=0, b_7=0):
     """
     Defining equations for each model
     """   
@@ -56,3 +56,5 @@ def equation(x, model, sigma_eps, b_0=0, b_1=0, b_2=0, b_3=0, b_4=0):
         return x + b_0 + b_2*(np.exp(x)**b_3) + np.random.normal(0, sigma_eps)
     elif model == 'M3':
         return 2*x -np.log(b_4 + np.exp(x)) + b_0 + b_1*np.exp(x) + np.random.normal(0, sigma_eps)
+    elif model == 'M4':
+        return x + b_5 + b_6*np.exp(x) + b_7*(np.exp(x))**2 + np.random.normal(0, sigma_eps)
