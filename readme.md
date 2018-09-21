@@ -1,3 +1,5 @@
+![Myocastor coypus] (https://github.com/NicolasSchreuder/AdPMCMC_project/blob/master/imgs/ragondin.jpg)
+
 # Presentation
 
 This repository contains the material conceived for a final year project in Sequential Monte Carlo (SMC) methods at ENSAE ParisTech.
