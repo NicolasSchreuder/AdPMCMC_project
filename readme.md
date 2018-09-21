@@ -1,4 +1,6 @@
-![Myocastor coypus] (imgs/ragondin.jpg)
+<p>
+    <img src="/imgs/ragondin.jpg" />
+</p>
 
 # Presentation
 
