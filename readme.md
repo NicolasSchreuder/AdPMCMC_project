@@ -1,4 +1,4 @@
-![Myocastor coypus] (https://raw.github.com/NicolasSchreuder/AdPMCMC_project/master/imgs/ragondin.jpg)
+![Myocastor coypus] (imgs/ragondin.jpg)
 
 # Presentation
 
